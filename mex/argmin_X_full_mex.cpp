@@ -47,11 +47,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     
 
     X.resize(C.size());
-    //    MatrixXd MM(2,2);
-    //    MatrixXd Hval(2,2);
-    //    MatrixXd HH(2,2);
-    //    VectorXd S(2);
-    //    double s1,h1,s2,h2;
+//        MatrixXd MM(2,2);
+//        MatrixXd Hval(2,2);
+//        MatrixXd HH(2,2);
+//        VectorXd S(2);
+//        double s1,h1,s2,h2;
 //    HH(1,0) = 0;
 //    HH(0,1) = 0;
 //
@@ -92,19 +92,19 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 //        X(4*i+2) = Hval(1,0);
 //        X(4*i+3) = Hval(1,1);
 //    }
-    
+//
     igl::parallel_for(C.size()/4,[&] (const int i){
         MatrixXd MM(2,2);
         MatrixXd Hval(2,2);
         MatrixXd HH(2,2);
         VectorXd S(2);
         double rho_with_weight;
-        rho_with_weight = rho/weights(i);
+        rho_with_weight = rho;
         //rho = rho_with_weight;
         double s1,h1,s2,h2;
         HH(1,0) = 0;
         HH(0,1) = 0;
-        
+
         MM(0,0) = C(4*i);
         MM(0,1) = C(4*i+1);
         MM(1,0) = C(4*i+2);
@@ -112,7 +112,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         //
         JacobiSVD<MatrixXd> svd( MM, ComputeFullV | ComputeFullU );
         S = svd.singularValues();
-        
+
         if ((S(0)-(1/rho_with_weight))>0) {
             h1 = S(0)-(1/rho_with_weight);
         }else{
@@ -133,9 +133,9 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         }
         HH(0,0) = h1;
         HH(1,1) = h2;
-        
+
         Hval = svd.matrixU()*HH*svd.matrixV().transpose();
-        
+
         X(4*i) = Hval(0,0);
         X(4*i+1) = Hval(0,1);
         X(4*i+2) = Hval(1,0);

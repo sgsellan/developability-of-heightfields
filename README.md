@@ -16,6 +16,6 @@ cd build
 cmake ..
 make
 ```
-Then, build our own mex files by entering Matlab and, in Matlab, navigating to `developability-of-heightfields/mex` and running `setup_mex` in the Matlab console.
+Then, build our own mex files by entering Matlab and, in Matlab, adding this repository in its entirety to your Matlab path (for instance, by running `addpath(genpath(path/to/developability-of-heightfields))`), navigating to `developability-of-heightfields/mex` and running `setup_mex` in the Matlab console.
 
 ## Use
