@@ -7,7 +7,7 @@ if nargin==1
 end
 
 [filepath,name,ext] = fileparts(filename);
-datestring = datestr(now,'mmmm-dd-HH-MM-SS');
+datestring = datestr(now,'mmmm-dd-HH.MM.SS');
 dir_name = [name,'-',datestring];
 objs_dir_name = [dir_name,'/objs'];
 pngs_dir_name = [dir_name,'/pngs'];
@@ -67,7 +67,7 @@ jumpstoggle = uicontrol('Style','togglebutton','Value',0,'Min',0,'Max',1,'String
         disp('Running ADMM...')
         Z = sparsify_height_field_admm(X,Y,Z0,'GetEnergy',false,'UseMex',...
             true,'AggregateNorm',1,'Omega',lambda,'Fill',true,'Jumps',jumpstoggle.Value);
-        disp('Done! Saving data...')
+        disp(['Done! Saving data to ',dir_name,'...'])
         save_everything(X,Y,Z,Z0,dir_name,false);
     end
 %%%
