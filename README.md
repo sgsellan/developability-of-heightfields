@@ -1,4 +1,4 @@
-# developability-of-heightfields
+# Developability of Heightfields
 Public code release for "Developability of Heightfields via Rank Minimization", presented at SIGGRAPH 2020 and authored by Silvia Sellán, Noam Aigerman and Alec Jacobson
 
 
@@ -16,4 +16,6 @@ cd build
 cmake ..
 make
 ```
-Then, build our own mex files by entering Matlab and, in Matlab, navigate to `developability-of-heightfields/mex` and run `setup_mex` in the Matlab console.
+Then, build our own mex files by entering Matlab and, in Matlab, navigating to `developability-of-heightfields/mex` and running `setup_mex` in the Matlab console.
+
+## Use
