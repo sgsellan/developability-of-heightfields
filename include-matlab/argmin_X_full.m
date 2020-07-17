@@ -1,5 +1,5 @@
 function [X,data_2] = argmin_X_full(Z,U,rho,data,A,II,get_energy,usemex,...
-    aggregate,opnorm,weights,NN,BXX,BXY,BYX,BYY,BX,BY,C,update)
+    aggregate,opnorm,weights,NN,BXX,BXY,BYX,BYY,BX,BY,C)
 
 X = zeros(size(A,1),1);
 AZ = A*Z;
@@ -26,23 +26,12 @@ if aggregate==1
     else
         
         if usemex
-            if update
-                [~,normals] = get_hessians(NN,BXX,BXY,BYX,BYY,BX,BY,C,Z);
-                % disp(1)
-                weights = -normals(:,3)./normrow(normals);
-            end
             
             % weights = ones(length(II),1);
             X = argmin_X_full_mex(AZ,U,II,rho,weights);
             
         else
             
-            if update
-            [~,normals] = get_hessians(NN,BXX,BXY,BYX,BYY,BX,BY,C,Z);
-            % disp(1)
-            
-            weights = -normals(:,3)./normrow(normals);
-            end
             
             
             for i=0:((size(A,1)/4)-1)

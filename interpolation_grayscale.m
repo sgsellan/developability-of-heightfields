@@ -9,9 +9,6 @@
 % via Rank Minimization", ACMSIGGRAPH 2020. Silvia Sellán, 
 % Noam Aigerman, Alec Jacobson
 %
-% Copyright 2020, Silvia Sellán (sgsellan@cs.toronto.edu)
-%
-%
 %%% READING AND PREPARING IMAGE
 addpath(genpath('.'))
 A = imread('peaks.png'); % Swap 'peaks.png' for your image

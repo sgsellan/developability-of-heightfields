@@ -1,40 +1,68 @@
 function [Z,data] = sparsify_height_field_admm(X,Y,Z0,varargin)
-% **Find the closest-to-developable surface within an eps of X,Y,Z0**
-% Explain how we do it
+% Use ADMM to find a heightfield close to Z0 that is piecewise developable.
+% 
+% For details, see "Developability of Heightfields via Rank Minimization", 
+% ACM SIGGRAPH 2020. Silvia Sellán, Noam Aigerman, Alec Jacobson
+%
+% Sample call:
+%
+%           Z = sparsify_height_field_admm(X,Y,Z0,'Lambda',lambda);
+%
 %
 % Input:
-%       X,Y are m by n matrices of grid coordinates like those created with
-%           MATLAB's meshgrid function
+%       X,Y are m by n matrices of hexagonal grid coordinates generated
+%           by (h,0) and (hcos(pi/3),hsin(pi/3)).
 %       Z0 is a m by n matrix containing the Z0 of the input height field
+
 %       Optional:
+%           'Lambda' data fidelity parameter {10^5}
+%           'MaxInnerIter' number of maximum ADMM iterations {10k}
+%           'GetEnergy' output actual energy value {false}
+%           'UseMex' use parallelized, faster C++ functions for X update {true}
+%           'AggregateNorm' optimize sum of ||H||* or of ||H||*^2 {1}
+%           'OperatorNorm' optimize the second sv of H instead of ||H||* {false}
+%           'Fill' use fit Hessians to fill occlusions {false}
+%           'Jumps' detect occlusions {false}
+%           'Threshold' for occlusion detection {40000}
+%           'Plot' plot input and output {true}
+%           'InterpolateB' indeces of points for interpolation problem {[]}
+%           'InterpolateB' values at points for interpolation problem {[]}
 %
+%
+% Output:
+%       Z is the output heightfield, which can be plotted with surf(X,Y,Z)
+%       data struct containing information for debugging
+
+
+
+
+
+
+
 %%%%% PARAMETER ASSIGNING
 %%% Default Parameters
 II = [];
-omega = 10;
+lambda = 10^5;
 maxinneriter = 10000;
 get_energy = false;
 usemex = true;
 aggregatenorm = 1;
 opnorm = false;
-fill = true;
-Z00 = [];
+fill = false;
 jumps = false;
 plot = true;
-thresh = 400000;
+thresh = 40000;
 interpolate_b = [];
 interpolate_bc = [];
-normal_weight = false;
-update = false;
 %%% End of Default Parameters
 
-%%% Alec's weird loop
-params_to_variables = containers.Map({'Interior','Omega',...
+%%% Setting user-specified parameters
+params_to_variables = containers.Map({'Interior','Lambda',...
     'MaxInnerIter','GetEnergy','UseMex','AggregateNorm',...
-    'OperatorNorm','Fill','InitialForGradient','Jumps','Plot','Thresh',...
+    'OperatorNorm','Fill','Jumps','Plot','Thresh',...
     'InterpolateB','InterpolateBC','NormalWeight','Update'},...
-    {'II','omega','maxinneriter','get_energy',...
-    'usemex','aggregatenorm','opnorm','fill','Z00','jumps','plot','thresh',...
+    {'II','lambda','maxinneriter','get_energy',...
+    'usemex','aggregatenorm','opnorm','fill','jumps','plot','thresh',...
     'interpolate_b','interpolate_bc','normal_weight','update'});
 v = 1;
 while v <= numel(varargin)
@@ -48,10 +76,15 @@ while v <= numel(varargin)
     end
     v=v+1;
 end
-%%% End of Alec's weird loop
+%%% 
+%%%%%
+
+
+
+
+
 
 tic
-
 m = size(X,1);
 n = size(X,2);
 always_II = [];
@@ -60,63 +93,33 @@ for j=3:(n-2) % for sub2ind but let's do one thing at a time.
     always_II = [always_II, ((j-1)*m)+(3:(m-2))];
 end
 
-% if isempty(II)
-%     [~,Z0,ghost] = interior_indeces(Z0,hx);
-%     background = find(Z0(:)==0);
-%     II = setdiff(1:m*n,background);
-%     background = setdiff(background,ghost);
-% else
-%     background = [];
-%     ghost = setdiff(1:m*n,II);
-% end
 remove_ghost = false;
 if isempty(II)
     background = unique([find(Z0(:)==0),find(isnan(Z0(:))),find(Z0(:)==-Inf)]);
     II = setdiff(1:m*n,background);
-    %II = setdiff(II,interpolate_b);
     remove_ghost = true;
 end
 II = intersect(II,always_II);
 [NN,BXX,BXY,BYX,BYY,BX,BY,C,bad,non_occluded] = ...
     get_connectivity(X,Y,Z0,II,'hex',thresh);
-[HH,normals] = get_hessians(NN,BXX,BXY,BYX,BYY,BX,BY,C,Z0);
-hess_big_sv = [];
-for i=1:size(HH,3)
-    [~,s,~] = svd(HH(:,:,i));
-    hess_big_sv(i) = s(1,1);
-end
-background = setdiff(1:(m*n),NN(:))';
 ghost = setdiff(NN(:),II);
 
 if jumps
-    % %%% TESTING SHIT
-    % ZZ0 = Z0(:);
-    % neigh = Z0(NN);
-    % non_occ = abs(max(neigh)-min(neigh))<18*hx;
-    % non_occ = (edge_density(II)<.2);
-    %non_occ = (hess_big_sv<5000);
-    % non_occ = (hess_big_sv<10000);
     non_occ = (non_occluded(II));
     remove_ghost = false;
-    % non_occ = (hess_big_sv<1000);
     II = II(logical(non_occ));
-    % II = setdiff(II,bad);
     NN = NN(:,logical(non_occ));
     background = setdiff(1:(m*n),NN(:))';
     ghost = setdiff(NN(:),II);
-    %remove_ghost = true;
-    warning('testing ghost stuff')
     data.II = II;
     if plot
         surf(X,Y,Z0,'EdgeColor','none')
         hold on
-        % plot3(X(II),Y(II),Z0(II),'.r','MarkerSize',1)
         plot3(X(background),Y(background),Z0(background),'.g','MarkerSize',1)
         plot3(X(ghost),Y(ghost),Z0(ghost),'.b','MarkerSize',1)
         % drawnow
         hold off
         %  pause
-        %%% TESTING SHIT
     end
 end
 if plot
@@ -130,28 +133,6 @@ if plot
 end
 
 weights = ones(length(II),1);
-%        V = [X(:),Y(:),Z0(:)];
-%         for i=1:length(II)
-%             F = [NN(2,i),NN(1,i),NN(4,i);...
-%                 NN(5,i),NN(2,i),NN(4,i);...
-%                 NN(7,i),NN(5,i),NN(4,i);...
-%                 NN(6,i),NN(7,i),NN(4,i);...
-%                 NN(3,i),NN(6,i),NN(4,i);...
-%                 NN(1,i),NN(3,i),NN(4,i)];
-%             weights(i) = sum(doublearea(V,F))./4;
-%         end
-%
-%         weights = weights/geomean(weights);
-%         weights = ones(length(II),1);
-if normal_weight
-    weights = -normals(:,3)./normrow(normals);
-    disp('Normal weighting')
-end
-if update
-    disp('Updating')
-    assert(normal_weight);
-end
-
 A = speye(4*length(II),4*length(II));
 c = sparse(4*length(II),1);
 state.Z = Z0(:);
@@ -167,33 +148,28 @@ B = build_operator_admm(X,Y,reshape(Zi,m,n),II);
 state.X = B*state.Z;
 state.argmin_Z_data.rho_prev = nan;
 argmin_X = @(Z,U,rho,data) argmin_X_full(Z,U,rho,data,B,II,get_energy,...
-    usemex,aggregatenorm,opnorm,weights,NN,BXX,BXY,BYX,BYY,BX,BY,C,update);
+    usemex,aggregatenorm,opnorm,weights,NN,BXX,BXY,BYX,BYY,BX,BY,C);
 
 argmin_Z = @(X,U,rho,data) argmin_Z_full(X,U,rho,data,B,II,...
-    Z0,omega,background,get_energy,weights,interpolate_b,interpolate_bc);
-%        [~,~,state] = admm_changed(argmin_X,argmin_Z,A,-B,c,state,'MaxIter',maxinneriter,...
-%            'TolAbs',0.01,'TolRel',0.001);
+    Z0,lambda,background,get_energy,weights,interpolate_b,interpolate_bc);
 [~,~,state] = admm_changed(argmin_X,argmin_Z,A,-B,c,state,'MaxIter',maxinneriter,...
     'TolAbs',0.0001,'TolRel',0.001);
 
 time = toc;
 data.II = II;
-data.title_str = ['Lambda: ',num2str(omega),'. Vertices: ',num2str(length(II)),...
+data.title_str = ['Lambda: ',num2str(lambda),'. Vertices: ',num2str(length(II)),...
     '. Time: ',num2str(time)];
-% pause
 disp(data.title_str)
 
 if remove_ghost
     state.Z(ghost) = Z0(ghost);
 end
-%state.Z(ghost) = NaN;
 
 if fill
     Z_gaps = reshape(state.Z,m,n);
     Z_gaps(background) = NaN;
     Z0_gaps = reshape(state.Z0,m,n);
     Z0_gaps(background) = NaN;
-    %save('before_filling.mat','Z_gaps','Z0_gaps');
     [NN,BXX,BXY,BYX,BYY,BX,BY,C,bad,non_occluded] = ...
         get_connectivity(X,Y,reshape(state.Z,m,n),II,'hex',thresh);
     [HH,normals,ind_term] = get_hessians(NN,BXX,BXY,BYX,BYY,BX,BY,C,reshape(state.Z,m,n));

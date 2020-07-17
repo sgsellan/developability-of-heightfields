@@ -66,7 +66,7 @@ jumpstoggle = uicontrol('Style','togglebutton','Value',0,'Min',0,'Max',1,'String
         surf(X,Y,Z0)
         disp('Running ADMM...')
         Z = sparsify_height_field_admm(X,Y,Z0,'GetEnergy',false,'UseMex',...
-            true,'AggregateNorm',1,'Omega',lambda,'Fill',true,'Jumps',jumpstoggle.Value);
+            true,'AggregateNorm',1,'Lambda',lambda,'Fill',false,'Jumps',jumpstoggle.Value);
         disp(['Done! Saving data to ',dir_name,'...'])
         save_everything(X,Y,Z,Z0,dir_name,false);
     end
