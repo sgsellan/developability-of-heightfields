@@ -1,5 +1,5 @@
 # Developability of Heightfields
-Public code release for ["Developability of Heightfields via Rank Minimization"](http://dgp.toronto.edu/~sgsellan/pdf/compressed-developables.pdf), presented at SIGGRAPH 2020 and authored by [Silvia Sellán](http://dgp.toronto.edu/~sgsellan/), [Noam Aigerman](https://noamaig.github.io) and [Alec Jacobson](http://www.cs.toronto.edu/~jacobson/).
+Public code release for ["Developability of Heightfields via Rank Minimization"](http://dgp.toronto.edu/~sgsellan/pdf/compressed-developables.pdf), presented at SIGGRAPH 2020 and authored by [Silvia Sellán](http://dgp.toronto.edu/~sgsellan/), [Noam Aigerman](https://noamaig.github.io) and [Alec Jacobson](http://www.cs.toronto.edu/~jacobson/). Please note that while this Matlab implementation of our method is hereby released under MIT License, the method itself is pending a US patent filed in 2020 by Adobe Inc.
 
 
 
