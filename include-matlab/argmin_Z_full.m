@@ -1,5 +1,11 @@
 function [Z,data_2] = argmin_Z_full(X,U,rho,data,A,II,Z0,omega,background,...
     get_energy,weights,interpolate_b,interpolate_bc)
+% Solves Z update in ADMM, which amounts to
+%               min lambda*||Z-Z0||^2 + (rho/2)||U-A*Z-X||^2
+%
+% The left hand side in the resulting linear system of equations
+% is precomputed, and only re-precomputed if rho changed.
+
 quad_error = false;
 
 % II = 1:m*n;

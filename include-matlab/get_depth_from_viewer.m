@@ -1,4 +1,7 @@
 function [X,Y,Z,C] = get_depth_from_viewer(V,F,n,C0)
+% Given a surface mesh, a grid size and a current angle from the viewer,
+% extract a hexagonal grid simulating what would happen if we did a 3D
+% scan of the surface from our current viewpoint.
 
 if nargin==3
     C0 = zeros(size(V,1),3);

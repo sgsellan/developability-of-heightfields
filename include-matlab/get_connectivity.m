@@ -1,4 +1,8 @@
 function [NN,BXX,BXY,BYX,BYY,BX,BY,C,bad,non_occluded] = get_connectivity(X,Y,Z,II,grid_type,thresh)
+% Given a grid (square, hex, hex pinched), returns NN,a  matrix whose i-th column stores
+% the indeces in X of the immediate neighbors to X(i), i.e. the indeces of those points
+% that intervene in the approximation of the Hessian of the i-th point of the grid.
+
 m = size(Z,1);
 n = size(Z,2);
 hx = X(1,2)-X(1,1);
@@ -6,9 +10,9 @@ h = hx;
 hy = hx;
 non_occluded = ones(m*n,1);
 bad = [];
+% Default treshold
 if nargin<6
 thresh = 40000;
-%warning('Changed threshold. 20000')
 end
 
 if size(II,2)==1
@@ -89,15 +93,6 @@ switch grid_type
                     II(i)+m;...
                     II(i)+1;...
                     II(i)+1+m]];
-%                                 hold off
-%                                 surf(X,Y,Z)
-%                                 hold on
-%                                 plot3(X(II(i)),Y(II(i)),Z(II(i)),'.r','MarkerSize',60)
-%                                 plot3(X(NN(:,i)),Y(NN(:,i)),Z(NN(:,i)),'.b','MarkerSize',30)
-%                                 view([0 90])
-%                                 axis equal
-%                                 drawnow
-%                                 pause
                 if nargout>8
                 for j=1:6
                     vals = Z(EE(:,i,j,1));
@@ -118,15 +113,6 @@ switch grid_type
                     II(i)+m;...
                     II(i)+1-m;...
                     II(i)+1]];
-%                                 hold off
-%                                 surf(X,Y,Z)
-%                                 hold on
-%                                 plot3(X(II(i)),Y(II(i)),Z(II(i)),'.r','MarkerSize',60)
-%                                 plot3(X(NN(:,i)),Y(NN(:,i)),Z(NN(:,i)),'.b','MarkerSize',30)
-%                                 view([0 90])
-%                                 axis equal
-%                                 drawnow
-%                                 pause
                 if nargout>8
                 for j=1:6
                     vals = Z(EE(:,i,j,2));
@@ -165,14 +151,6 @@ switch grid_type
                     II(i)+m;...
                     II(i)+1;...
                     II(i)+1+m]];
-%                                 hold off
-%                                 surf(X,Y,Z)
-%                                 hold on
-%                                 plot3(X(II(i)),Y(II(i)),Z(II(i)),'.r','MarkerSize',60)
-%                                 plot3(X(NN(:,i)),Y(NN(:,i)),Z(NN(:,i)),'.b','MarkerSize',30)
-%                                 view([0 90])
-%                                 drawnow
-%                                 pause
             else
                 NN = [NN,[II(i)-1-m;...
                     II(i)-1;...
@@ -180,14 +158,6 @@ switch grid_type
                     II(i)+m;...
                     II(i)+1-m;...
                     II(i)+1]];
-                %                 hold off
-                %                 surf(X,Y,Z)
-                %                 hold on
-                %                 plot3(X(II(i)),Y(II(i)),Z(II(i)),'.r','MarkerSize',60)
-                %                 plot3(X(NN(:,i)),Y(NN(:,i)),Z(NN(:,i)),'.b','MarkerSize',30)
-                %                 view([0 90])
-                %                 drawnow
-                %                 pause
             end
         end
         B = inv(A'*A)*(A');
@@ -198,9 +168,4 @@ switch grid_type
         
 end
 
-% 
-% hold off
-% surf(X,Y,Z)
-% hold on
-% plot3(X(bad),Y(bad),Z(bad),'.b','MarkerSize',5)
 end

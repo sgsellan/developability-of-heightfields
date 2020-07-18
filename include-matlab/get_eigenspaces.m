@@ -1,4 +1,5 @@
 function [UU,SS,VV] = get_eigenspaces(HH)
+% Singular value decomposition of the Hessian matrices.
     UU = zeros(size(HH));
     SS = UU;
     VV = UU;

@@ -1,4 +1,6 @@
 function [A,NN] = build_operator_admm(X,Y,Z,II)
+% Builds the matrix A that returns concatenated Hessians given
+% heights in a vector Z, H = A*Z.
 
 m = size(Z,1);
 n = size(Z,2);

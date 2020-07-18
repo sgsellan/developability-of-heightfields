@@ -1,4 +1,6 @@
 function [HH,normals,ind_term] = get_hessians(NN,BXX,BXY,BYX,BYY,BX,BY,C,Z)
+% Given connectivity and information about the grid, build the Hessian matrices.
+% This is coded this way so this function is independent of grid type.
 
 HH = zeros(2,2,size(NN,2));
 normals = zeros(size(NN,2),3);

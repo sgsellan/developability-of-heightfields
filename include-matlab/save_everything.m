@@ -1,4 +1,7 @@
 function [J,J0] = save_everything(X,Y,Z,Z0,directory,boundary)
+% Given output and input from sparsify_heightfield_admm, we save input and output
+% as triangulated .objs and saves data about principal curvatures, Gaussian curvature,
+% etc. and many other quantities needed for debugging and experimental evaluation.
 
 if nargin==5
     boundary = true;

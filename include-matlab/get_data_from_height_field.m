@@ -1,4 +1,6 @@
 function data = get_data_from_height_field(X,Y,Z,II,Z0)
+% Given a heightfield, obtain principal curvatures, global energy term
+% and other quantities for debugging and evaluating outputs in general.
 
 m = size(Z,1);
 n = size(Z,2);

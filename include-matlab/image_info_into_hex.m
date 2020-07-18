@@ -1,4 +1,6 @@
 function [X,Y,Z,hex_edge_density] = image_info_into_hex(IM_INPUT,E)
+% Interpolate values from a square grid into a hexagonal grid.
+
 n_input = size(IM_INPUT,2);
 m_input = size(IM_INPUT,1);
 % hx_input = 1/n_input;

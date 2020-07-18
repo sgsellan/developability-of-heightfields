@@ -1,4 +1,5 @@
 function K = gaussian_curvature_grid(X,Y,Z)
+% Gaussian curvature on a square grid calculated via angle defect.
 
     K = zeros(size(X,1)*size(X,2),1);
 

@@ -1,5 +1,14 @@
 function [X,data_2] = argmin_X_full(Z,U,rho,data,A,II,get_energy,usemex,...
     aggregate,opnorm,weights,NN,BXX,BXY,BYX,BYY,BX,BY,C)
+% Solves X update in ADMM, which amounts to
+% min ||X||_* + (rho/2)||U-AZ-X||^2
+% There are many options in this function, but the only one used for
+% the results in the paper is aggregate = true, usemex = true, which amounts to just calling
+%
+%                       AZ = A*Z
+%                       X = argmin_X_full_mex(AZ,U,II,rho,weights);
+%
+%
 
 X = zeros(size(A,1),1);
 AZ = A*Z;

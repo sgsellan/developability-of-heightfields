@@ -1,11 +1,31 @@
 function gui_developables(filename,grid_size)
+% Launches GUI to developabilize a heightfield obtained by simulating a scan of
+% a triangular mesh surface.
+%
+% Sample call:
+%
+%           gui_developables('data/bunny.obj');
+%
+%
+% Input:
+%       filename of triangle mesh in .obj, .stl, .ply or .off
+%       grid_size {default: 200}
+%
+% Output:
+%       None. A folder is created in your current directory with the name of your mesh
+%       and the date and time of the experiment containing all input and output data.
+%
+%
+%
+%
 
-
-
+%%% Defaults
 if nargin==1
     grid_size = 200;
 end
+%%%
 
+%%% Creating directory for output
 [filepath,name,ext] = fileparts(filename);
 datestring = datestr(now,'mmmm-dd-HH.MM.SS');
 dir_name = [name,'-',datestring];
@@ -13,9 +33,9 @@ objs_dir_name = [dir_name,'/objs'];
 pngs_dir_name = [dir_name,'/pngs'];
 mkdir_call = ['mkdir ',dir_name];
 system(mkdir_call);
+%%%
 
-
-
+%%% Read mesh
 switch ext
     case '.obj'
         [V,F]=readOBJ(filename);
@@ -29,6 +49,7 @@ end
 V=V-min(V);
 V=V./max(max(V));
 writeOBJ([dir_name,'/',name,'_mesh.obj'],V,F);
+%%%
 
 %%% EXPLANATION
 disp('Welcome to the "Developability of Heightfields via Rank Minimization" Graphic Interface')

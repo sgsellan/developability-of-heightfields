@@ -1,4 +1,6 @@
 function Z = simulate_scan(Z0,n)
+% Group the values of Z0 into n bins as if we had done a depth scan with
+% only n channels available.
 
 Z = Z0(:);
 

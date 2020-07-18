@@ -1,5 +1,8 @@
 function [X,Z,state] = admm_changed(argmin_X,argmin_Z,A,B,c,state,varargin)
-
+%
+% THIS IS A FUNCTION FROM GPTOOLBOX COPYRIGHTED BY ALEC JACOBSON 2015
+% modified slightly to serve the purposes of our method
+%
 % Inputs:
 %   argmin_X  Function handle returning the optimizer of:
 %      argmin  f(X) + ρ/2‖ A*X + B*Z - c + U‖²
