@@ -4,7 +4,7 @@ Public code release for ["Developability of Heightfields via Rank Minimization"]
 
 
 ## Installation
-We have only succesfully validated this installation on MacOS 10.15, but are confident it should work on most Unix-based machines. 
+We have only succesfully validated this installation on MacOS 10.15 with Matlab 2020a, but are confident it should work on most Unix-based machines. 
 
 To install this library, please start by cloning the repository recursively
 ```
