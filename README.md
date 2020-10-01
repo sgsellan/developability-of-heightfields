@@ -41,5 +41,6 @@ Please do not hesitate to contact
 [sgsellan@cs.toronto.edu](mailto:sgsellan@cs.toronto.edu) if you find any issues
 or bugs in this code, or you struggle to run it in any way.
 
-
+## Graphics Replicability Stamp Initiative
+We, the authors, hereby give the Graphics Replicability Stamp Initiative and its reviewers permission to review the code and advertise the review publicly after the stamp is approved.
 
