@@ -31,10 +31,7 @@ and follow the instructions in the console. For example, you can start by trying
 gui_developables('data/bunny.obj')
 ```
  
-We also allow you to replicate the results from our developable interpolation
-results (Figs. 18 & 19). Simply look at `interpolation_grayscale.m`, follow the
-instructions to use your own constraints and link to the image in Line 14. You
-can also run it as is to recover our output from Fig. 18.
+We also allow you to replicate the results from our paper exactly, by runnning the scripts in the `figures/` directory. Instructions to run and understand the output of each can be found in each scripts' first commented lines.
 
 ## Known Issues
 Please do not hesitate to contact

@@ -102,6 +102,7 @@ end
 II = intersect(II,always_II);
 [NN,BXX,BXY,BYX,BYY,BX,BY,C,bad,non_occluded] = ...
     get_connectivity(X,Y,Z0,II,'hex',thresh);
+background = setdiff(1:(m*n),NN(:))';
 ghost = setdiff(NN(:),II);
 
 if jumps
