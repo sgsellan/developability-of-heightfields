@@ -31,7 +31,7 @@ and follow the instructions in the console. For example, you can start by trying
 gui_developables('data/bunny.obj')
 ```
  
-We also allow you to replicate the results from our paper exactly, by runnning the scripts in the `figures/` directory. Instructions to run and understand the output of each can be found in each scripts' first commented lines.
+We also allow you to replicate the results from our paper exactly, by runnning the scripts in the `figures/` directory. Instructions to run and understand the output of each can be found in each scripts' first commented lines. In most cases, the scripts will generate input and output `.obj` files which we then rendered using Blender for the paper figures. You can look at our Blender setup in `render/` and substitute the existing meshes with the input and output from our scripts to exactly replicate our paper figures up to very minor lighting direction and orientation choices.
 
 ## Known Issues
 Please do not hesitate to contact
