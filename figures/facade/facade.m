@@ -6,6 +6,6 @@ load('../../data/facade_rotated.mat') % Load input
 Z0 = Z;
 Z = sparsify_height_field_admm(X,Y,Z0,'GetEnergy',false,'UseMex',...
     true,'AggregateNorm',1,...
-    'Omega',1000000,'Fill',false); % run method
+    'Lambda',1000000,'Fill',false); % run method
 system('mkdir facade') % save output
 save_everything(X,Y,Z,Z0,'facade')
