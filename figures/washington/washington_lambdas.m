@@ -4,13 +4,13 @@
 
 addpath(genpath('../../'));
 load('../../data/washington.mat'); % load input
-omegas = {10,100,1000,10000,100000,1000000,10^7,10^8};
+omegas = {10000,100000,1000000,10^7,10^8};
 
 lambda = [];
 kappa2 = [];
 for i=1:numel(omegas)
     dir_name = ['omega_',num2str(omegas{i})];
-%     system(['mkdir ',dir_name]);
+     system(['mkdir ',dir_name]);
      Z = sparsify_height_field_admm(X,Y,Z0,'GetEnergy',false,'UseMex',...
              true,'AggregateNorm',1,...
              'Lambda',omegas{i},'Fill',false,'Jumps',false);
