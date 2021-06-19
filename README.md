@@ -33,11 +33,14 @@ gui_developables('data/bunny.obj')
  
 We also allow you to replicate the results from our paper exactly, by runnning the scripts in the `figures/` directory. Instructions to run and understand the output of each can be found in each scripts' first commented lines. In most cases, the scripts will generate input and output `.obj` files which we then rendered using Blender for the paper figures. You can look at our Blender setup in `render/` and substitute the existing meshes with the input and output from our scripts to exactly replicate our paper figures up to very minor lighting direction and orientation choices.
 
+## C++ implementation
+
+This Matlab implementation is the one we used to generate all the examples in the paper, and it has been thouroughly tested. I strongly encourage you to use it. However, if you do not have access to Maltab for whichever reason and running our code would be useful for you, I also provide a limited, guarantee-free C++ implementation of our algorithm [here](https://github.com/sgsellan/developability-of-heightfields-cpp).  
+
 ## Known Issues
 Please do not hesitate to contact
 [sgsellan@cs.toronto.edu](mailto:sgsellan@cs.toronto.edu) if you find any issues
 or bugs in this code, or you struggle to run it in any way.
 
-## Graphics Replicability Stamp Initiative
-We, the authors, hereby give the Graphics Replicability Stamp Initiative and its reviewers permission to review the code and advertise the review publicly after the stamp is approved.
+
 
